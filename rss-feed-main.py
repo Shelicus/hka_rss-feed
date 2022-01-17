@@ -39,7 +39,7 @@ def aktuelle_liste_allgemein():
     while schleife == True:
         try:
             feed_liste = []
-            url = requests.get('url-allgemeine-feeds')
+            url = requests.get('url-allgemein')
             soup = BeautifulSoup(url.content, 'xml')
             feeds = soup.find_all('item')
 
@@ -87,9 +87,7 @@ async def rss_discord_senden():
             while True:
 
 
-                feed_liste = []
-                feed_liste.append(aktuelle_liste_allgemein())
-                feed_liste.append(aktuelle_liste_datein())
+                feed_liste = [aktuelle_liste_allgemein(), aktuelle_liste_datein()]
                 fehler_allgemein = 0
                 fehler_datei = 0
 
@@ -109,48 +107,50 @@ async def rss_discord_senden():
                     for x in range(len(feed_liste[n])):
                         if feed_liste[n][x][3] != wdhl_datum_liste[n]:
                             if x <= 50:
+                                try:
+                                    if x == 0:
+                                        message_counter = 0
+                                        async for o in message_channels[n].history():
+                                            message_counter = message_counter + 1
 
-                                if x == 0:
-                                    message_counter = 0
-                                    async for o in message_channels[n].history():
-                                        message_counter = message_counter + 1
+                                        if message_counter > 50:
+                                            await message_channels[n].purge(limit=message_counter - 50)
 
-                                    if message_counter > 50:
-                                        await message_channels[n].purge(limit=message_counter - 50)
+                                            if len(feed_liste[n][x][2]) > 3500:
+                                                feed_liste[n][x][2] = 'Zulang'
+                                            if len(feed_liste[n][x][1]) > 100:
+                                                feed_liste[n][x][1] = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
 
+                                            wdhl_datum_liste[n] = feed_liste[n][x][3]
+                                            embed_feed = discord.Embed(title=f"Title: {feed_liste[n][x][0]}",
+                                                                       url=f'{feed_liste[n][x][1]}',
+                                                                       description=f'''Discription: {feed_liste[n][x][2]}''',
+                                                                       color=0x11ff00)
+                                            embed_feed.set_footer(text=f"Datum: {feed_liste[n][x][3]}")
+
+                                            await message_channels[n].send(embed=embed_feed)
+
+                                    else:
                                         if len(feed_liste[n][x][2]) > 3500:
                                             feed_liste[n][x][2] = 'Zulang'
                                         if len(feed_liste[n][x][1]) > 100:
-                                            feed_liste[n][x][1] = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
+                                            feed_liste[n][x][
+                                                1] = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
 
-                                        wdhl_datum_liste[n] = feed_liste[n][x][3]
+                                        name = 'list_message_name' + f"{x - 1}"
+                                        variable_eingabe = await message_channels[n].fetch_message(
+                                            messages_rss(name, n))
+
                                         embed_feed = discord.Embed(title=f"Title: {feed_liste[n][x][0]}",
                                                                    url=f'{feed_liste[n][x][1]}',
                                                                    description=f'''Discription: {feed_liste[n][x][2]}''',
                                                                    color=0x11ff00)
                                         embed_feed.set_footer(text=f"Datum: {feed_liste[n][x][3]}")
 
-                                        await message_channels[n].send(embed=embed_feed)
-
-                                else:
-                                    if len(feed_liste[n][x][2]) > 3500:
-                                        feed_liste[n][x][2] = 'Zulang'
-                                    if len(feed_liste[n][x][1]) > 100:
-                                        feed_liste[n][x][
-                                            1] = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
-
-                                    name = 'list_message_name' + f"{x - 1}"
-                                    variable_eingabe = await message_channels[n].fetch_message(
-                                        messages_rss_allgemein(name))
-
-                                    embed_feed = discord.Embed(title=f"Title: {feed_liste[n][x][0]}",
-                                                               url=f'{feed_liste[n][x][1]}',
-                                                               description=f'''Discription: {feed_liste[n][x][2]}''',
-                                                               color=0x11ff00)
-                                    embed_feed.set_footer(text=f"Datum: {feed_liste[n][x][3]}")
-
-                                    await variable_eingabe.edit(embed=embed_feed)
-
+                                        await variable_eingabe.edit(embed=embed_feed)
+                                except Exception as fail_senden:
+                                    print(fail_senden)
+                                    print(feed_liste[n][x])
                         else:
                             pass
 
@@ -160,6 +160,7 @@ async def rss_discord_senden():
             channel_fail = client.get_channel(channel('fail_id'))
             await channel_fail.send('Fail bei Senden von Datei-RSS:')
             await channel_fail.send(fail)
+            aus = 0
 
 
 async def change_status():
@@ -180,3 +181,4 @@ async def change_status():
 
 
 client.run("Bot-Token")
+
