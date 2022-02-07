@@ -15,12 +15,15 @@ def aktuelle_liste_datein():
     while schleife == True:
         try:
             feed_liste = []
-            url = requests.get('url-datein-private-feed + password eingesetzt')
+            url = requests.get('URL + PAsswort eingesetzt')
             soup = BeautifulSoup(url.content, 'xml')
             feeds = soup.find_all('item')
             for x in range(len(feeds)):
                 title = feeds[x].title.text
-                link = feeds[x].link.text
+                if feeds[x].link.text.split('?')[0] == 'https://ilias.h-ka.de/goto.php' or feeds[x].link.text.split('?')[0] == 'http://eit-lx-n-03.hs-karlsruhe.de/rss/index.php':
+                    link = feeds[x].link.text
+                else:
+                    link = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
                 if len(feeds[x].description) > 0:
                     discription = feeds[x].description.text
                 else:
@@ -39,13 +42,16 @@ def aktuelle_liste_allgemein():
     while schleife == True:
         try:
             feed_liste = []
-            url = requests.get('url-allgemein')
+            url = requests.get('http://www.eit.hs-karlsruhe.de/rss/index.php?id=41')
             soup = BeautifulSoup(url.content, 'xml')
             feeds = soup.find_all('item')
 
             for x in range(len(feeds)):
                 title = feeds[x].title.text
-                link = feeds[x].link.text
+                if feeds[x].link.text.split('?')[0] == 'https://ilias.h-ka.de/goto.php' or feeds[x].link.text.split('?')[0] == 'http://eit-lx-n-03.hs-karlsruhe.de/rss/index.php':
+                    link = feeds[x].link.text
+                else:
+                    link = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
                 if len(feeds[x].description) > 0:
                     discription = feeds[x].description.text
                 else:
@@ -76,39 +82,40 @@ async def rss_discord_senden():
     global aus
     if (aus == 0):
         aus = 1
-        try:
-            channel_fail = client.get_channel(channel('fail_id'))
-            await channel_fail.purge()
 
-            global wdhl_datum_liste
-
-            message_channels = [client.get_channel(channel('rss_allgemein_id')), client.get_channel(channel('rss_datein_id'))]
-
-            while True:
+        await client.wait_until_ready()
+        channel_fail = client.get_channel(channel_number('fail_id'))
+        await channel_fail.purge()
 
 
+        global wdhl_datum_liste
+
+        message_channels = [client.get_channel(channel_number('rss_allgemein_id')), client.get_channel(channel_number('rss_datein_id'))]
+
+        while True:
+            try:
                 feed_liste = [aktuelle_liste_allgemein(), aktuelle_liste_datein()]
                 fehler_allgemein = 0
                 fehler_datei = 0
 
 
                 if feed_liste[0][0] == -1:
-                    channel_fail = client.get_channel(channel('fail_id'))
+                    channel_fail = client.get_channel(channel_number('fail_id'))
                     await channel_fail.send('Fail bei Abfrage von Allgemein:')
                     await channel_fail.send(feed_liste[0][1])
                     fehler_allgemein = 1
                 elif feed_liste[1][0] == -1:
-                    channel_fail = client.get_channel(channel('fail_id'))
+                    channel_fail = client.get_channel(channel_number('fail_id'))
                     await channel_fail.send('Fail bei Abfrage von Datei:')
                     await channel_fail.send(feed_liste[1][1])
                     fehler_datei = -1
 
                 for n in range(0 + fehler_allgemein,2 - fehler_datei,1):
                     for x in range(len(feed_liste[n])):
-                        if feed_liste[n][x][3] != wdhl_datum_liste[n]:
-                            if x <= 50:
-                                try:
-                                    if x == 0:
+                        if x <= 50:
+                            try:
+                                if x == 0:
+                                    if feed_liste[n][x][3] != wdhl_datum_liste[n]:
                                         message_counter = 0
                                         async for o in message_channels[n].history():
                                             message_counter = message_counter + 1
@@ -122,6 +129,7 @@ async def rss_discord_senden():
                                                 feed_liste[n][x][1] = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
 
                                             wdhl_datum_liste[n] = feed_liste[n][x][3]
+
                                             embed_feed = discord.Embed(title=f"Title: {feed_liste[n][x][0]}",
                                                                        url=f'{feed_liste[n][x][1]}',
                                                                        description=f'''Discription: {feed_liste[n][x][2]}''',
@@ -130,37 +138,38 @@ async def rss_discord_senden():
 
                                             await message_channels[n].send(embed=embed_feed)
 
-                                    else:
-                                        if len(feed_liste[n][x][2]) > 3500:
-                                            feed_liste[n][x][2] = 'Zulang'
-                                        if len(feed_liste[n][x][1]) > 100:
-                                            feed_liste[n][x][
-                                                1] = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
+                                elif x <= 50 and x != 0:
+                                    if len(feed_liste[n][x][2]) > 3500:
+                                        feed_liste[n][x][2] = 'Zulang'
+                                    if len(feed_liste[n][x][1]) > 100:
+                                        feed_liste[n][x][
+                                            1] = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
 
-                                        name = 'list_message_name' + f"{x - 1}"
-                                        variable_eingabe = await message_channels[n].fetch_message(
-                                            messages_rss(name, n))
+                                    name = 'list_message_name' + f"{x - 1}"
+                                    variable_eingabe = await message_channels[n].fetch_message(
+                                        messages_rss(name, n))
 
-                                        embed_feed = discord.Embed(title=f"Title: {feed_liste[n][x][0]}",
-                                                                   url=f'{feed_liste[n][x][1]}',
-                                                                   description=f'''Discription: {feed_liste[n][x][2]}''',
-                                                                   color=0x11ff00)
-                                        embed_feed.set_footer(text=f"Datum: {feed_liste[n][x][3]}")
 
-                                        await variable_eingabe.edit(embed=embed_feed)
-                                except Exception as fail_senden:
-                                    print(fail_senden)
-                                    print(feed_liste[n][x])
-                        else:
-                            pass
+                                    embed_feed = discord.Embed(title=f"Title: {feed_liste[n][x][0]}",
+                                                               url=f'{feed_liste[n][x][1]}',
+                                                               description=f'''Discription: {feed_liste[n][x][2]}''',
+                                                               color=0x11ff00)
+                                    embed_feed.set_footer(text=f"Datum: {feed_liste[n][x][3]}")
+
+                                    await variable_eingabe.edit(embed=embed_feed)
+
+                            except Exception as fail_senden:
+                                print(fail_senden)
+                                print(feed_liste[n][x])
 
                 await asyncio.sleep(60 * 2)
-
-        except Exception as fail:
-            channel_fail = client.get_channel(channel('fail_id'))
-            await channel_fail.send('Fail bei Senden von Datei-RSS:')
-            await channel_fail.send(fail)
-            aus = 0
+            except Exception as fail:
+                try:
+                    channel_fail = client.get_channel(channel_number('fail_id'))
+                    await channel_fail.send('Fail bei Abfrage:')
+                    await channel_fail.send(fail)
+                except:
+                    pass
 
 
 async def change_status():
@@ -181,4 +190,3 @@ async def change_status():
 
 
 client.run("Bot-Token")
-
