@@ -1,3 +1,6 @@
+#---------------------------------------------------------------------------------------------------
+# Abfrage der IDs der Nachrichten
+#--------------------------------------------------------------------------------------------------
 def messages_rss(message_name, nummer):
     if nummer == 1:
         list_message = [50 Text nachrichten + 1 ZUm löschen aber nicht eintragen]
@@ -17,6 +20,9 @@ def messages_rss(message_name, nummer):
                 zahl = list_message[-x - 1]
                 return zahl
 
+#---------------------------------------------------------------------------------------------------
+# Abfrage der Channels-ID
+#--------------------------------------------------------------------------------------------------
 def channel(channel_name):
     rss_datein_id = 900101000684269589
     rss_allgemein_id = 900101058297233438
