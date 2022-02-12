@@ -1,3 +1,6 @@
+#---------------------------------------------------------------------------------------------------
+# Bibliotheken die Importiert wurden
+#---------------------------------------------------------------------------------------------------
 from bs4 import BeautifulSoup
 import requests
 from Discord_Verarbeitung import *
@@ -10,6 +13,9 @@ aus = 0
 wdhl_datum_liste = ['allgemein', 'datein']
 
 
+#---------------------------------------------------------------------------------------------------
+# Abfrage des RSS-FEEDs der Datein
+#--------------------------------------------------------------------------------------------------
 def aktuelle_liste_datein():
     schleife = True
     while schleife == True:
@@ -37,6 +43,9 @@ def aktuelle_liste_datein():
             return [-1, fail]
 
 
+#---------------------------------------------------------------------------------------------------
+# Abfrage des RSS-FEEDs der Allgemeinen Nachrichten
+#--------------------------------------------------------------------------------------------------
 def aktuelle_liste_allgemein():
     schleife = True
     while schleife == True:
@@ -71,13 +80,19 @@ client = commands.Bot(
     intents=intents
 )
 
-
+#---------------------------------------------------------------------------------------------------
+# Start vom Bot
+#--------------------------------------------------------------------------------------------------
 @client.event
 async def on_connect():
     print("[Ich habe mich eingeloggt]...")
     client.loop.create_task(change_status())
     client.loop.create_task(rss_discord_senden())
 
+
+#---------------------------------------------------------------------------------------------------
+# Main, verarbeitung der RSS-FEEDs
+#--------------------------------------------------------------------------------------------------
 async def rss_discord_senden():
     global aus
     if (aus == 0):
@@ -171,7 +186,10 @@ async def rss_discord_senden():
                 except:
                     pass
 
-
+#---------------------------------------------------------------------------------------------------
+# Veränderung des Status des Bots
+#--------------------------------------------------------------------------------------------------
+                
 async def change_status():
     while True:
         try:
@@ -188,5 +206,7 @@ async def change_status():
         except:
             pass
 
-
+#---------------------------------------------------------------------------------------------------
+# Token vom Bot der eingesetzt werden muss
+#--------------------------------------------------------------------------------------------------
 client.run("Bot-Token")
