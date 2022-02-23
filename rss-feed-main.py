@@ -114,16 +114,21 @@ async def rss_discord_senden():
                 fehler_datei = 0
 
 
-                if feed_liste[0][0] == -1:
+                if len(feed_liste[0]) == 0:
+                    fehler_allgemein = 1
+                elif feed_liste[0][0] == -1:
                     channel_fail = client.get_channel(channel_number('fail_id'))
                     await channel_fail.send('Fail bei Abfrage von Allgemein:')
                     await channel_fail.send(feed_liste[0][1])
                     fehler_allgemein = 1
+
+                if len(feed_liste[1]) == 0:
+                    fehler_datei = 1
                 elif feed_liste[1][0] == -1:
                     channel_fail = client.get_channel(channel_number('fail_id'))
                     await channel_fail.send('Fail bei Abfrage von Datei:')
                     await channel_fail.send(feed_liste[1][1])
-                    fehler_datei = -1
+                    fehler_datei = 1
 
                 for n in range(0 + fehler_allgemein,2 - fehler_datei,1):
                     for x in range(len(feed_liste[n])):
