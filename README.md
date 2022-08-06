@@ -88,7 +88,7 @@ Abfrage der aktuellen RSS-FEEDs der Hochschule Karlsruhe und sendet diese anschl
 ### Kompiler Version:
 |Kompiler|Version|Test Ergebnis|
 |:---:|:---:|:---:|
-|Python| 3.9 |![funk](https://img.shields.io/badge/checks-passing-green)|
+|Python| 3.9 |![funk](https://img.shields.io/badge/checks-not%20tested-red)|
 |Python| 3.10 |![funk](https://img.shields.io/badge/checks-passing-green)|
 |Python| aktuellste Version |![funk_n](https://img.shields.io/badge/checks-not%20tested-red)|
 
