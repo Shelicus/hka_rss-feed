@@ -55,6 +55,17 @@ def aktueller_rss_feed(url):
 
         except Exception as fail:
             return [-1, fail]
+  
+#---------------------------------------------------------------------------------------------------
+# Abfrage der IDs der Nachrichten
+#----------------------------------------------------------------------------------------
+async def messages_rss(messageNummer, channel):
+    channel = client.get_channel(channel)
+    messageCounter = 0
+    async for o in channel.history():
+        if messageCounter == messageNummer:
+            return o.id
+        messageCounter += 1
 
 intents = discord.Intents.default()
 client = commands.Bot(
@@ -126,9 +137,7 @@ async def rss_discord_senden():
                                                 await message_channels[n].send(embed=embed_feed)
 
                                         elif x <= 50 and x != 0:
-                                            name = 'list_message_name' + f"{x - 1}"
-                                            variable_eingabe = await message_channels[n].fetch_message(
-                                                messages_rss(name, n))
+                                            variable_eingabe = await message_channels[n].fetch_message(messages_rss(x, message_channels[n]))
                                             await variable_eingabe.edit(embed=embed_feed)
 
                                 except Exception as fail_senden:
