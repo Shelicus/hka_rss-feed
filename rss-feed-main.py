@@ -30,11 +30,11 @@ def aktueller_rss_feed(url):
                         title = feeds[x].title.text
                     else:
                         title = None
-                    if 'link' in obj['item'] and len(feeds[x].link.tex) < 100:
+                    if 'link' in obj['item'] and len(str(feeds[x].link.text)) < 100:
                         link = feeds[x].link.text
                     else:
                         link = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
-                    if 'description' in obj['item'] and len(feeds[x].description.text) < 3200:
+                    if 'description' in obj['item'] and len(str(feeds[x].description.text)) < 3200:
                         discription = feeds[x].description.text
                     else:
                         discription = None
