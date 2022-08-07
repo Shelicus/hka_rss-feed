@@ -28,8 +28,9 @@ Abfrage der aktuellen RSS-FEEDs der Hochschule Karlsruhe und sendet diese anschl
 ### Quick-Start-Vorbereitung:
 1. BOT-Erstellen und auf dem Server mit Admin Rolle einladen
 2. Token vom Bot im Skript einfügen
-3. Anlegen von 50 Nachrichten die vom Bot versendet werden in einem channel (Müssen später vo Bot bearbeitet werden könne)
-4. 3 Channels Anlegen (Allgemeine Nachrichten, Private Grupen Nachrichten und Fail Benarichtigungen)
+3. 3 Channels Anlegen (Allgemeine EIT Nachrichten, Datein Nachrichten, Allgemein IWI Nachrichten und Fail Benarichtigungen)
+4. Anlegen von 50 Nachrichten die vom Bot versendet werden in einem channel (Müssen später vo Bot bearbeitet werden könne -> 50_messages)
+-> Id vom Channel einfügen und durchlaufen lassen
 5. Channels und Nachrichten ID in discord_verarbeitung.py einfügen
 6. Im Main script, die URLs für die RSS-FEEDs einfügen
 7. Python Installieren und Bibliotheken
