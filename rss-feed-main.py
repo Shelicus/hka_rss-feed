@@ -30,11 +30,11 @@ def aktueller_rss_feed(url):
                         title = feeds[x].title.text
                     else:
                         title = None
-                    if 'link' in obj['item']:
+                    if 'link' in obj['item'] and len(feeds[x].link.tex) < 100:
                         link = feeds[x].link.text
                     else:
                         link = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
-                    if 'description' in obj['item']:
+                    if 'description' in obj['item'] and len(feeds[x].description.text) < 3200:
                         discription = feeds[x].description.text
                     else:
                         discription = None
@@ -108,13 +108,6 @@ async def rss_discord_senden():
                         for x in range(len(feed_liste[n])):
                             if x <= 50:
                                 try:
-                                    if len(feed_liste[n][x][2]) > 3200:
-                                        feed_liste[n][x][2] = 'Zulang'
-
-                                    if len(feed_liste[n][x][1]) > 100:
-                                        feed_liste[n][x][
-                                            1] = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
-
                                     embed_feed = discord.Embed(title=f"Title: {feed_liste[n][x][0]}",
                                                                url=f'{feed_liste[n][x][1]}',
                                                                description=f'Discription: {feed_liste[n][x][2]}',
