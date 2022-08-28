@@ -31,7 +31,12 @@ def aktueller_rss_feed(url):
                     else:
                         title = None
                     if 'link' in obj['item'] and len(str(feeds[x].link.text)) < 100:
-                        link = feeds[x].link.text
+                        try:
+                            with requests.Session() as s:
+                                s.get(str(feeds[x].link.t))
+                            link = feeds[x].link.text
+                        except:
+                            link = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
                     else:
                         link = 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400'
                     if 'description' in obj['item'] and len(str(feeds[x].description.text)) < 3200:
