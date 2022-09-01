@@ -65,7 +65,6 @@ def aktueller_rss_feed(url):
 # Abfrage der IDs der Nachrichten
 #----------------------------------------------------------------------------------------
 async def messages_rss(messageNummer, channel):
-    channel = client.get_channel(channel)
     messageCounter = 0
     async for o in channel.history():
         if messageCounter == messageNummer:
@@ -141,9 +140,9 @@ async def rss_discord_senden():
                                                 wdhl_datum_liste[n] = feed_liste[n][x][3]
                                                 await message_channels[n].send(embed=embed_feed)
 
-                                        elif x <= 50 and x != 0:
-                                            variable_eingabe = await message_channels[n].fetch_message(messages_rss(x, message_channels[n]))
-                                            await variable_eingabe.edit(embed=embed_feed)
+                                      else:
+                                           variable_eingabe = await message_channels[n].fetch_message(await messages_rss(x, message_channels[n]))
+                                           await variable_eingabe.edit(embed=embed_feed)
 
                                 except Exception as fail_senden:
                                     print(fail_senden)
