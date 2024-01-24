@@ -3,7 +3,8 @@
 
 
 ## Beschreibung:
-Abfrage der aktuellen RSS-FEEDs der Hochschule Karlsruhe und sendet diese anschließend auf Discord in den Channel. Die RSS-FEEDs werden unterschieden zwischen allgemeinen Nachrichten zum Studiengang und spezifische RSS-FEED zu den abonnierten Gruppen in ILIAS. Die neuste Nachricht wird nur versendet, was zu einer einzigen Benachrichtigung führt und es werden immer die ältesten 50 Nachrichten angezeigt.
+Abfrage der aktuellen RSS-FEEDs der Hochschule Karlsruhe und sendet diese anschließend auf Discord in den Channel. Die RSS-FEEDs werden unterschieden zwischen allgemeinen Nachrichten zum Studiengang und spezifische RSS-FEED zu den abonnierten Gruppen in ILIAS. Die neuste Nachricht wird nur versendet, wodurch es nur zu einer einzigen Benachrichtigung kommt. Außerdem werden immer nur die ältesten 50 Nachrichten angezeigt.
+Dieses Repository wird nicht mehr gewartet und befindet sich in read-only. 
 
 
 ## Verzeichnis:
@@ -109,7 +110,7 @@ Abfrage der aktuellen RSS-FEEDs der Hochschule Karlsruhe und sendet diese anschl
 ## Licenze:
 
 Die Lizenz zur weiter Verwendung dieses Projektes, wird durch das **Creative Common** Model angegeben. 
-Bei Ablehnung jeglicher Verwendung durch meinerseits mit den Piktogrammen oder Sie möchten das Projekt in einer Form verwenden, die nicht hier genannt wurde, muss vor 
+Bei Ablehnung jeglicher Verwendung durch meinerseits mit den Piktogrammen oder Sie möchten das Projekt in einer Form verwenden die nicht hier genannt wurde, muss vor 
 der Benutzung des Projektes die Zustimmung eingeholt werden.
 
 |Verwendet|Piktogramm|Bezeichnung|Verlinkung|
